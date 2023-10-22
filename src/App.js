@@ -1,5 +1,5 @@
 import './App.css';
-import {useState} from 'react';
+import {useState} from 'react';  //useState는 리액트의 훅
 
 function Header(props){
   console.log('props',props,props.title);
@@ -15,7 +15,7 @@ function Nav(props){
   props.topics.map((e)=>(
     lis.push(<li key={e.id}><a id={e.id} href={'/read/'+e.id} onClick={e=>{
       e.preventDefault();
-      props.onChangeMode(e.target.id);
+      props.onChangeMode(Number(e.target.id));
     }}>{e.title}</a></li>))
   );
   return <nav>
@@ -31,11 +31,11 @@ function Article(props){
   </article>
 }
 function App() {
-  // const _mode = useState("WELCOME");
+  // const _mode = useState('WELCOME');
   // const mode = _mode[0];
   // const setMode = _mode[1];
-  const [mode, setMode] = useState('WELCOME');
-  const [id,setId] = useState(null);
+  const[mode, setMode] = useState('WELCOME');
+  const[id, setId] = useState(null); //현재의 값이 선택되지 않았으므로 null, id는 마우스로 선택되는 id
   const topics = [
     {id:1, title:'html',body:'html is...'},
     {id:2, title:'css',body:'css is...'},
@@ -44,8 +44,15 @@ function App() {
   let content = null;
   if(mode ==='WELCOME'){
     content = <Article title="Welcome" body="Hello, WEB!"></Article>
-  }else if(mode==='READ'){
-    content = <Article title="Read" body="Hello, Read!"></Article>
+  }else if(mode === 'READ'){
+    let t,b = null; //title,body값 초기화
+    for(let i=0;i<topics.length;i++){
+      if(topics[i].id === id){
+        t = topics[i].title;
+        b = topics[i].body;
+      }
+    }
+    content = <Article title = {t} body = {b}></Article>
   }
   return (
     <div>
